@@ -31,6 +31,34 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 def score(dice)
   # You need to write this method
+  total = 0
+  # uniqs pop them if there are 3
+  unless dice.length == 0
+    common = dice.group_by{|i| i}.max{|x,y| x[1].length <=> y[1].length}[0]
+    triple = dice.select do |d|
+      common == d
+    end
+    if triple.length >= 3
+      unless common  == 1
+          total += common * 100
+      else
+          total += 10 * 100
+      end
+      dice.delete_at(dice.index(common))
+      dice.delete_at(dice.index(common))
+      dice.delete_at(dice.index(common))
+    end
+    dice.each do |die|
+      if die == 5
+        total += 50
+      elsif die == 1
+        total += 100
+      end
+    end
+  else
+    total = 0
+  end
+  total
 end
 
 class AboutScoringProject < Neo::Koan
