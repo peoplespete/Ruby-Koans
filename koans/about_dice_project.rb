@@ -11,7 +11,7 @@ class DiceSet
   def roll(num)
     @values = []
     num.times do
-      @values.push((rand*6 + 1).round)
+      @values.push((rand*6 + 1).floor)
     end
   end
 end
