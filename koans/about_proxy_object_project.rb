@@ -14,11 +14,54 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 class Proxy
   def initialize(target_object)
+    # if target_object.is_a? String
+    #   # self = String.new(target_object)
+    # else
     @object = target_object
+
+    # end
     # ADD MORE CODE HERE
+    @messages = []
+  end
+
+  def upcase!
+    @messages << :upcase!
+    @object.upcase!
+  end
+
+  def split
+    @messages << :split
+    @object.split
   end
 
   # WRITE CODE HERE
+  def method_missing(method_name, *args, &block)
+    @messages << method_name
+    if method_name == :channel=
+      @object.channel = args[0]
+    elsif method_name == :channel
+      @object.channel
+    elsif method_name == :power
+      @object.power
+    elsif method_name == :on?
+      @object.on?
+    else
+      raise NoMethodError
+    end
+  end
+
+  def messages
+    @messages
+  end
+
+  def called? method_name
+    @messages.include? method_name
+  end
+
+  def number_of_times_called method_name
+    @messages.select{ |item| item == method_name }.length
+  end
+
 end
 
 # The proxy object should pass the following Koan:
